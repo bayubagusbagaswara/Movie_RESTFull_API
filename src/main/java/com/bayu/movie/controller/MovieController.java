@@ -1,11 +1,14 @@
 package com.bayu.movie.controller;
 
+import com.bayu.movie.dto.*;
 import com.bayu.movie.service.MovieService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/movies")
 public class MovieController {
 
     private final MovieService movieService;
@@ -14,13 +17,53 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    // List of Movie (Get All)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<List<MovieResponse>> listOfMovie() {
+        List<MovieResponse> movies = movieService.getAllMovies();
+        return WebResponse.<List<MovieResponse>>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get all list of movie")
+                .data(movies)
+                .build();
+    }
 
-    // Detail of Movie (Get By Id)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<MovieResponse> detailOfMovie(@PathVariable(name = "id") Integer id) {
+        MovieResponse movieDetail = movieService.getMovieDetail(id);
+        return WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get detail of movie with id : " + id)
+                .data(movieDetail)
+                .build();
+    }
 
-    // Add New Movie
+    @PostMapping
+    public WebResponse<MovieResponse> addNewMovie(@RequestBody CreateMovieRequest createMovieRequest) {
+        MovieResponse movie = movieService.addNewMovie(createMovieRequest);
+        return WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully add new movie with id : " + movie.getId())
+                .data(movie)
+                .build();
+    }
 
-    // Update Movie
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<MovieResponse> updateMovie(@PathVariable(name = "id") Integer id, @RequestBody UpdateMovieRequest updateMovieRequest) {
+        MovieResponse movie = movieService.updateMovie(id, updateMovieRequest);
+        return WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully update movie with id : " + id)
+                .data(movie)
+                .build();
+    }
 
-    // Delete Movie
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public MessageResponse deleteMovie(@PathVariable(name = "id") Integer id) {
+        movieService.deleteMovie(id);
+        return MessageResponse.builder()
+                .success(Boolean.TRUE)
+                .message("Successfully delete movie with id : " + id)
+                .build();
+    }
+
 }
