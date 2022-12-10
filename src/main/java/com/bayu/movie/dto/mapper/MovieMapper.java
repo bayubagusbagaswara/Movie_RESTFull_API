@@ -12,10 +12,10 @@ public class MovieMapper {
 
     public MovieResponse mapFromMovie(Movie movie) {
         return MovieResponse.builder()
-                .id(String.valueOf(movie.getId()))
+                .id(movie.getId())
                 .title(movie.getTitle())
                 .description(movie.getDescription())
-                .rating(String.valueOf(movie.getRating()))
+                .rating(movie.getRating())
                 .image(movie.getImage())
                 .createdAt(String.valueOf(movie.getCreatedAt()))
                 .updatedAt(String.valueOf(movie.getUpdatedAt()))
