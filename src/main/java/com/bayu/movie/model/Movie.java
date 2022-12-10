@@ -23,7 +23,6 @@ public class Movie {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Lob
     @Column(name = "DESCRIPTION")
     private String description;
 
