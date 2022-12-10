@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateMovieResponse {
 
-    private String id;
+    private Integer id;
 
     private String title;
 
     private String description;
 
-    private String rating;
+    private Float rating;
 
     private String image;
 
