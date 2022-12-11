@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @Builder
@@ -17,15 +14,13 @@ import javax.validation.constraints.Size;
 public class UpdateMovieRequest {
 
     @NotBlank(message = "Title must not be blank")
-    @Size(min = 3, message = "Title length minimum must be 3 characters")
     private String title;
 
-    @NotBlank(message = "Description must not be blank")
     @Size(min = 10, max = 500, message = "Description length minimum must be 10 characters and maximum must be 500 characters")
     private String description;
 
-    @NotNull(message = "Rating must not be blank")
-    @Min(value = 1, message = "Rating must be greater than or equal to 1")
+    @Min(value = 1, message = "Rating minimum is 1")
+    @Max(value = 10, message = "Rating maximum is 10")
     private Float rating;
 
     private String image;
