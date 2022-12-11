@@ -1,9 +1,7 @@
 package com.bayu.movie.service.impl;
 
 import com.bayu.movie.dto.CreateMovieRequest;
-import com.bayu.movie.dto.MovieResponse;
 import com.bayu.movie.dto.UpdateMovieRequest;
-import com.bayu.movie.dto.mapper.MovieMapper;
 import com.bayu.movie.exception.ResourceNotFoundException;
 import com.bayu.movie.model.Movie;
 import com.bayu.movie.repository.MovieRepository;
@@ -18,15 +16,12 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
 
-    private final MovieMapper movieMapper;
-
-    public MovieServiceImpl(MovieRepository movieRepository, MovieMapper movieMapper) {
+    public MovieServiceImpl(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
-        this.movieMapper = movieMapper;
     }
 
     @Override
-    public MovieResponse addNewMovie(CreateMovieRequest createMovieRequest) {
+    public Movie addNewMovie(CreateMovieRequest createMovieRequest) {
         Movie movie = Movie.builder()
                 .title(createMovieRequest.getTitle())
                 .description(createMovieRequest.getDescription())
@@ -37,11 +32,11 @@ public class MovieServiceImpl implements MovieService {
 
         movieRepository.save(movie);
 
-        return movieMapper.mapFromMovie(movie);
+        return movie;
     }
 
     @Override
-    public MovieResponse updateMovie(Integer id, UpdateMovieRequest updateMovieRequest) {
+    public Movie updateMovie(Integer id, UpdateMovieRequest updateMovieRequest) {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
 
@@ -65,28 +60,24 @@ public class MovieServiceImpl implements MovieService {
 
         movieRepository.save(movie);
 
-        return movieMapper.mapFromMovie(movie);
+        return movie;
     }
 
     @Override
-    public MovieResponse getMovieDetail(Integer id) {
-        Movie movie = movieRepository.findById(id)
+    public Movie getMovieDetail(Integer id) {
+        return movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
-
-        return movieMapper.mapFromMovie(movie);
     }
 
     @Override
-    public List<MovieResponse> getAllMovies() {
-        List<Movie> movieList = movieRepository.findAll();
-        return movieMapper.mapFromMovieList(movieList);
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
     }
 
     @Override
     public void deleteMovie(Integer id) {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
-
         movieRepository.delete(movie);
     }
 
