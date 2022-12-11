@@ -4,6 +4,7 @@ import com.bayu.movie.dto.CreateMovieRequest;
 import com.bayu.movie.dto.MovieResponse;
 import com.bayu.movie.dto.UpdateMovieRequest;
 import com.bayu.movie.exception.ResourceNotFoundException;
+import com.bayu.movie.model.Movie;
 import com.bayu.movie.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ class MovieServiceImplTest {
                 .image("")
                 .build();
 
-        MovieResponse movie = movieService.addNewMovie(createMovieRequest);
+        Movie movie = movieService.addNewMovie(createMovieRequest);
 
         assertNotNull(movie.getId());
         assertNotNull(movie.getCreatedAt());
@@ -51,7 +52,7 @@ class MovieServiceImplTest {
                 .image("avatar-img")
                 .build();
 
-        MovieResponse movie = movieService.updateMovie(id, updateMovieRequest);
+        Movie movie = movieService.updateMovie(id, updateMovieRequest);
 
         assertNotNull(movie.getUpdatedAt());
         assertNotSame(movie.getCreatedAt(), movie.getUpdatedAt());
@@ -63,7 +64,7 @@ class MovieServiceImplTest {
     @Test
     void getMovieDetail() {
         Integer id = 4;
-        MovieResponse movieDetail = movieService.getMovieDetail(id);
+        Movie movieDetail = movieService.getMovieDetail(id);
 
         assertNotNull(movieDetail);
         assertSame(id, movieDetail.getId());
@@ -72,7 +73,7 @@ class MovieServiceImplTest {
     @Test
     void getAllMovies() {
         Integer totalSampleData = 2;
-        List<MovieResponse> movies = movieService.getAllMovies();
+        List<Movie> movies = movieService.getAllMovies();
 
         assertEquals(totalSampleData, movies.size());
     }
@@ -82,7 +83,7 @@ class MovieServiceImplTest {
         Integer id = 4;
         movieService.deleteMovie(id);
         assertThrows(ResourceNotFoundException.class, () -> {
-            MovieResponse movieDetail = movieService.getMovieDetail(id);
+            Movie movieDetail = movieService.getMovieDetail(id);
         });
     }
 }
