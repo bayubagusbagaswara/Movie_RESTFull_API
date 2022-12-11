@@ -68,7 +68,7 @@ Test them using postman or any other rest client.
 }
 ```
 
-#### <a id="create_product_success">Create Product Success Response</a>
+#### <a id="create_movie_success">Create Movie Success Response</a>
 ```json
 {
   "success": true,
@@ -164,7 +164,7 @@ Test them using postman or any other rest client.
 }
 ```
 
-#### <a id="get_all_moives">Get All Movies Response</a>
+#### <a id="get_all_movies">Get All Movies Response</a>
 ```json
 {
   "success": true,
