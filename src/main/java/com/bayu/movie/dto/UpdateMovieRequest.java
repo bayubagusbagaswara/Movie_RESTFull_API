@@ -21,7 +21,7 @@ public class UpdateMovieRequest {
     private String title;
 
     @NotBlank(message = "Description must not be blank")
-    @Size(min = 10, max = 20, message = "Description length minimum must be 10 characters and maximum must be 20 characters")
+    @Size(min = 10, max = 500, message = "Description length minimum must be 10 characters and maximum must be 500 characters")
     private String description;
 
     @NotNull(message = "Rating must not be blank")
