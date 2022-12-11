@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,20 +24,23 @@ class MovieControllerTest {
 
     @Test
     void listOfMovie() {
-        WebResponse<List<MovieResponse>> movie = movieController.listOfMovie();
+        ResponseEntity<WebResponse<List<MovieResponse>>> responseEntity = movieController.listOfMovie();
 
-        assertEquals(Boolean.TRUE, movie.getSuccess());
-        assertEquals(1, movie.getData().size());
+        assertEquals(Boolean.TRUE, Objects.requireNonNull(responseEntity.getBody()).getSuccess());
+        assertEquals(1, responseEntity.getBody().getData().size());
+        assertEquals(200, responseEntity.getStatusCodeValue());
     }
 
     @Test
     void detailOfMovie() {
-        Integer id = 1;
-        WebResponse<MovieResponse> movie = movieController.detailOfMovie(id);
+        Integer id = 2;
+        ResponseEntity<WebResponse<MovieResponse>> responseEntity = movieController.detailOfMovie(id);
 
-        assertEquals(Boolean.TRUE, movie.getSuccess());
-        assertNotNull(movie);
-        assertSame(id, movie.getData().getId());
+        assertEquals(Boolean.TRUE, Objects.requireNonNull(responseEntity.getBody()).getSuccess());
+        assertNotNull(responseEntity.getBody());
+        assertSame(id, responseEntity.getBody().getData().getId());
+
+        assertEquals(200, responseEntity.getStatusCodeValue());
     }
 
     @Test
@@ -47,17 +52,18 @@ class MovieControllerTest {
                 .image("")
                 .build();
 
-        WebResponse<MovieResponse> movie = movieController.addNewMovie(createMovieRequest);
+        ResponseEntity<WebResponse<MovieResponse>> responseEntity = movieController.addNewMovie(createMovieRequest);
 
-        assertEquals(Boolean.TRUE, movie.getSuccess());
-        assertNotNull(movie.getData().getId());
+        assertEquals(Boolean.TRUE, Objects.requireNonNull(responseEntity.getBody()).getSuccess());
+        assertNotNull(responseEntity.getBody().getData().getId());
+        assertEquals(201, responseEntity.getStatusCodeValue());
 
-        log.info("ID: {}", movie.getData().getId());
+        log.info("ID: {}", responseEntity.getBody().getData().getId());
     }
 
     @Test
     void updateMovie() {
-        Integer id = 1;
+        Integer id = 2;
         UpdateMovieRequest updateMovieRequest = UpdateMovieRequest.builder()
                 .title("Harry Potter update")
                 .description("This is Harry Potter update description")
@@ -65,22 +71,24 @@ class MovieControllerTest {
                 .image("img-update")
                 .build();
 
-        WebResponse<MovieResponse> movie = movieController.updateMovie(id, updateMovieRequest);
+        ResponseEntity<WebResponse<MovieResponse>> responseEntity = movieController.updateMovie(id, updateMovieRequest);
 
-        assertEquals(Boolean.TRUE, movie.getSuccess());
-        assertNotNull(movie.getData().getUpdatedAt());
-        assertSame(id, movie.getData().getId());
+        assertEquals(Boolean.TRUE, Objects.requireNonNull(responseEntity.getBody()).getSuccess());
+        assertNotNull(responseEntity.getBody().getData().getUpdatedAt());
+        assertEquals(id, responseEntity.getBody().getData().getId());
+        assertEquals(200, responseEntity.getStatusCodeValue());
     }
 
     @Test
     void deleteMovie() {
         Integer id = 1;
-        WebResponse<String> response = movieController.deleteMovie(id);
+        ResponseEntity<WebResponse<String>> responseEntity = movieController.deleteMovie(id);
 
-        assertEquals(Boolean.TRUE, response.getSuccess());
+        assertEquals(Boolean.TRUE, Objects.requireNonNull(responseEntity.getBody()).getSuccess());
+        assertEquals(200, responseEntity.getStatusCodeValue());
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            WebResponse<String> webResponse = movieController.deleteMovie(id);
+            ResponseEntity<WebResponse<String>> response = movieController.deleteMovie(id);
         });
     }
 }
