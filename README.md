@@ -18,7 +18,7 @@ Created Movie RESTFull API to provide information about movies.
 CREATE DATABASE movie_db WITH OWNER postgres;
 ```
 
-**3. Postgresql username and password **
+**3. Postgresql username and password**
 
 + open `src/main/resources/application.properties`
 
