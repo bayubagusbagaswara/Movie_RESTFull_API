@@ -1,9 +1,6 @@
 package com.bayu.movie.controller;
 
 import com.bayu.movie.dto.*;
-import com.bayu.movie.exception.AppException;
-import com.bayu.movie.exception.BadRequestException;
-import com.bayu.movie.exception.ResourceNotFoundException;
 import com.bayu.movie.model.Movie;
 import com.bayu.movie.service.MovieService;
 import org.springframework.http.HttpStatus;
@@ -27,123 +24,65 @@ public class MovieController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<List<MovieResponse>>> listOfMovie() {
-        try {
-            List<Movie> allMovies = movieService.getAllMovies();
-            List<MovieResponse> movies = allMovies.stream()
-                    .map(x -> MovieResponse.builder()
-                            .id(x.getId())
-                            .title(x.getTitle())
-                            .description(x.getDescription())
-                            .rating(x.getRating())
-                            .image(x.getImage())
-                            .createdAt(String.valueOf(x.getCreatedAt()))
-                            .updatedAt(String.valueOf(x.getUpdatedAt()))
-                            .build()).collect(Collectors.toList());
-            WebResponse<List<MovieResponse>> webResponse = WebResponse.<List<MovieResponse>>builder()
-                    .success(Boolean.TRUE)
-                    .message("Successfully get all list of movie")
-                    .data(movies)
-                    .build();
+        List<Movie> movieList = movieService.getAllMovies();
+        List<MovieResponse> movieResponses = mapFromMovieList(movieList);
+        WebResponse<List<MovieResponse>> webResponse = WebResponse.<List<MovieResponse>>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get all list of movie")
+                .data(movieResponses)
+                .build();
 
-            return new ResponseEntity<>(webResponse, HttpStatus.OK);
-        } catch (AppException e) {
-            WebResponse<List<MovieResponse>> webResponse = WebResponse.<List<MovieResponse>>builder()
-                    .success(Boolean.FALSE)
-                    .message(e.getMessage())
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<MovieResponse>> detailOfMovie(@PathVariable(name = "id") Integer id) {
-
-        try {
-            Movie movie = movieService.getMovieDetail(id);
-            MovieResponse movieDetail = mapFromMovie(movie);
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.TRUE)
-                    .message("Successfully get detail of movie with id : " + id)
-                    .data(movieDetail)
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.FALSE)
-                    .message(e.getMessage())
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.NOT_FOUND);
-        }
+        Movie movie = movieService.getMovieDetail(id);
+        MovieResponse movieDetail = mapFromMovie(movie);
+        WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get detail of movie with id : " + id)
+                .data(movieDetail)
+                .build();
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<WebResponse<MovieResponse>> addNewMovie(@Valid @RequestBody CreateMovieRequest createMovieRequest) {
-        try {
-            Movie movie = movieService.addNewMovie(createMovieRequest);
-            MovieResponse movieResponse = mapFromMovie(movie);
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.TRUE)
-                    .message("Successfully add new movie with id : " + movie.getId())
-                    .data(movieResponse)
-                    .build();
+        Movie movie = movieService.addNewMovie(createMovieRequest);
+        MovieResponse movieResponse = mapFromMovie(movie);
+        WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully add new movie with id : " + movie.getId())
+                .data(movieResponse)
+                .build();
 
-            return new ResponseEntity<>(webResponse, HttpStatus.CREATED);
-        } catch (BadRequestException e) {
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.FALSE)
-                    .message(e.getMessage())
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(webResponse, HttpStatus.CREATED);
     }
 
     @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<MovieResponse>> updateMovie(@PathVariable(name = "id") Integer id, @Valid @RequestBody UpdateMovieRequest updateMovieRequest) {
-        try {
-            Movie movie = movieService.updateMovie(id, updateMovieRequest);
-            MovieResponse movieResponse = mapFromMovie(movie);
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.TRUE)
-                    .message("Successfully update movie with id : " + id)
-                    .data(movieResponse)
-                    .build();
+    public ResponseEntity<WebResponse<MovieResponse>> updateMovie(@PathVariable(name = "id") Integer id, @RequestBody UpdateMovieRequest updateMovieRequest) {
+        Movie movie = movieService.updateMovie(id, updateMovieRequest);
+        MovieResponse movieResponse = mapFromMovie(movie);
+        WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully update movie with id : " + id)
+                .data(movieResponse)
+                .build();
 
-            return new ResponseEntity<>(webResponse, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.TRUE)
-                    .message(e.getMessage())
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.NOT_FOUND);
-        } catch (BadRequestException e) {
-            WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
-                    .success(Boolean.TRUE)
-                    .message(e.getMessage())
-                    .build();
-            return new ResponseEntity<>(webResponse, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<String>> deleteMovie(@PathVariable(name = "id") Integer id) {
-        try {
-            movieService.deleteMovie(id);
-            WebResponse<String> webResponse = WebResponse.<String>builder()
-                    .success(Boolean.TRUE)
-                    .message("Successfully delete movie with id : " + id)
-                    .build();
+        movieService.deleteMovie(id);
+        WebResponse<String> webResponse = WebResponse.<String>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully delete movie with id : " + id)
+                .build();
 
-            return new ResponseEntity<>(webResponse, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            WebResponse<String> webResponse = WebResponse.<String>builder()
-                    .success(Boolean.TRUE)
-                    .message(e.getMessage())
-                    .build();
-
-            return new ResponseEntity<>(webResponse, HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
     }
-
 
     private MovieResponse mapFromMovie(Movie movie) {
         return MovieResponse.builder()
