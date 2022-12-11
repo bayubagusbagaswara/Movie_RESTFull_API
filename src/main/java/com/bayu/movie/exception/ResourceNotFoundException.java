@@ -1,44 +1,23 @@
 package com.bayu.movie.exception;
 
-import com.bayu.movie.dto.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException {
 
-    private transient MessageResponse messageResponse;
-
-    private String resourceName;
-    private String fieldName;
-    private Object fieldValue;
-
-    public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
-        super();
-        this.resourceName = resourceName;
-        this.fieldName = fieldName;
-        this.fieldValue = fieldValue;
+    public ResourceNotFoundException() {
     }
 
-    public String getResourceName() {
-        return resourceName;
+    public ResourceNotFoundException(String message) {
+        super(message);
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public ResourceNotFoundException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public Object getFieldValue() {
-        return fieldValue;
-    }
-
-    public MessageResponse getMessageResponse() {
-        return messageResponse;
-    }
-
-    public void setMessageResponse() {
-        String message = String.format("%s not found with %s: '%s'", resourceName, fieldName, fieldValue);
-
-        messageResponse = new MessageResponse(Boolean.FALSE, message);
+    public ResourceNotFoundException(Throwable cause) {
+        super(cause);
     }
 }
