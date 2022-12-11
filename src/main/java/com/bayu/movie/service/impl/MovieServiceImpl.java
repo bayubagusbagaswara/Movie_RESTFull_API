@@ -4,6 +4,7 @@ import com.bayu.movie.dto.CreateMovieRequest;
 import com.bayu.movie.dto.MovieResponse;
 import com.bayu.movie.dto.UpdateMovieRequest;
 import com.bayu.movie.dto.mapper.MovieMapper;
+import com.bayu.movie.exception.BadRequestException;
 import com.bayu.movie.exception.ResourceNotFoundException;
 import com.bayu.movie.model.Movie;
 import com.bayu.movie.repository.MovieRepository;
@@ -43,7 +44,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieResponse updateMovie(Integer id, UpdateMovieRequest updateMovieRequest) {
         Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
 
         if (updateMovieRequest.getTitle() != null) {
             movie.setTitle(updateMovieRequest.getTitle());
@@ -71,7 +72,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieResponse getMovieDetail(Integer id) {
         Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
 
         return movieMapper.mapFromMovie(movie);
     }
@@ -85,7 +86,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void deleteMovie(Integer id) {
         Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id : " + id));
 
         movieRepository.delete(movie);
     }
