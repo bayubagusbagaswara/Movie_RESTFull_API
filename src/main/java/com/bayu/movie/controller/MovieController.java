@@ -6,7 +6,6 @@ import com.bayu.movie.exception.BadRequestException;
 import com.bayu.movie.exception.ResourceNotFoundException;
 import com.bayu.movie.model.Movie;
 import com.bayu.movie.service.MovieService;
-import com.bayu.movie.util.ValidationUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +20,6 @@ import java.util.stream.Collectors;
 public class MovieController {
 
     private final MovieService movieService;
-//    private final ValidationUtil validationUtil;
-//
-//    public MovieController(MovieService movieService, ValidationUtil validationUtil) {
-//        this.movieService = movieService;
-//        this.validationUtil = validationUtil;
-//    }
-
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
@@ -87,7 +79,6 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<WebResponse<MovieResponse>> addNewMovie(@Valid @RequestBody CreateMovieRequest createMovieRequest) {
         try {
-//            validationUtil.validate(createMovieRequest);
             Movie movie = movieService.addNewMovie(createMovieRequest);
             MovieResponse movieResponse = mapFromMovie(movie);
             WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
@@ -109,7 +100,6 @@ public class MovieController {
     @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<MovieResponse>> updateMovie(@PathVariable(name = "id") Integer id, @Valid @RequestBody UpdateMovieRequest updateMovieRequest) {
         try {
-//            validationUtil.validate(updateMovieRequest);
             Movie movie = movieService.updateMovie(id, updateMovieRequest);
             MovieResponse movieResponse = mapFromMovie(movie);
             WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
