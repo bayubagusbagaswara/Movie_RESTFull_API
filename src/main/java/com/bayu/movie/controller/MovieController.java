@@ -63,9 +63,9 @@ public class MovieController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public MessageResponse deleteMovie(@PathVariable(name = "id") Integer id) {
+    public WebResponse<String> deleteMovie(@PathVariable(name = "id") Integer id) {
         movieService.deleteMovie(id);
-        return MessageResponse.builder()
+        return WebResponse.<String>builder()
                 .success(Boolean.TRUE)
                 .message("Successfully delete movie with id : " + id)
                 .build();
