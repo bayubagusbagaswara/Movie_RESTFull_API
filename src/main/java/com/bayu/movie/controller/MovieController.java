@@ -107,7 +107,7 @@ public class MovieController {
     }
 
     @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<MovieResponse>> updateMovie(@PathVariable(name = "id") Integer id, @RequestBody UpdateMovieRequest updateMovieRequest) {
+    public ResponseEntity<WebResponse<MovieResponse>> updateMovie(@PathVariable(name = "id") Integer id, @Valid @RequestBody UpdateMovieRequest updateMovieRequest) {
         try {
 //            validationUtil.validate(updateMovieRequest);
             Movie movie = movieService.updateMovie(id, updateMovieRequest);
