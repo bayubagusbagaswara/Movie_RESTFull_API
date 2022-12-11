@@ -15,14 +15,18 @@ Created Movie RESTFull API to provide information about movies.
 **2. Create PostgreSQL database**
 
 ```bash
-CREATE DATABASE yourdbname;
-CREATE USER youruser WITH ENCRYPTED PASSWORD 'yourpass';
-GRANT ALL PRIVILEGES ON DATABASE yourdbname TO youruser;
+CREATE DATABASE movie_db WITH OWNER postgres;
 ```
 
-**3. Change postgresql username and password as per your installation**
+**3. Postgresql username and password **
 
 + open `src/main/resources/application.properties`
+
+```bash
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+```
+
 + change `spring.datasource.username` and `spring.datasource.password` as per your postgres installation
 
 **4. Install library**
@@ -44,11 +48,11 @@ The app will start running at <http://localhost:8080>
 
 | Method | URL              | Description      | Request Body          | Response Success              | Response Validation Error   | Response Not Found |
 |--------|------------------|------------------|-----------------------|-------------------------------|-----------------------------|--------------------|
-| POST   | /movies          | Create new movie | [JSON](#create_movie) | [JSON](#create_movie_success) | [JSON](#create_movie_error) | [JSON](#not_found) |
-| PATCH  | /movies/{id}     | Update movie     | [JSON](#update_movie) | [JSON](#update_movie_success) |                             |                    |
-| DELETE | /movies/{id}     | Delete movie     | -                     | [JSON](#delete_movie_success) |                             |                    | 
-| GET    | /movies          | Get all movies   | -                     | [JSON](#get_movie)            |                             |                    |
-| GET    | /movies/{id}     | Get movie detail | -                     | [JSON](#get_all_movies)       |                             |                    |             
+| POST   | /movies          | Create new movie | [JSON](#create_movie) | [JSON](#create_movie_success) | [JSON](#create_movie_error) | -                  |
+| PATCH  | /movies/{id}     | Update movie     | [JSON](#update_movie) | [JSON](#update_movie_success) | [JSON](#update_movie_error) | [JSON](#not_found) |
+| DELETE | /movies/{id}     | Delete movie     | -                     | [JSON](#delete_movie_success) | -                           | [JSON](#not_found) | 
+| GET    | /movies          | Get all movies   | -                     | [JSON](#get_movie)            | -                           | -                  |
+| GET    | /movies/{id}     | Get movie detail | -                     | [JSON](#get_all_movies)       | -                           | [JSON](#not_found) |             
 
 Test them using postman or any other rest client.
 
@@ -94,7 +98,7 @@ Test them using postman or any other rest client.
 }
 ```
 
-#### <a id="update_movie"><Update Movie Request Body</a>
+#### <a id="update_movie">Update Movie Request Body</a>
 ```json
 {
   "title": "Pengabdi Setan 2 Comunion update",
@@ -117,6 +121,19 @@ Test them using postman or any other rest client.
     "image": "",
     "createdAt": "2022-12-11T19:00:09.767",
     "updatedAt": "2022-12-11T19:02:39.799"
+  }
+}
+```
+
+#### <a id="update_movie_error">Update Movie Error Validation Response</a>
+```json
+{
+  "success": false,
+  "message": "Bad Request",
+  "data": {
+    "rating": "Rating minimum is 1",
+    "description": "Description length minimum must be 10 characters and maximum must be 500 characters",
+    "title": "Title must not be blank"
   }
 }
 ```
@@ -184,7 +201,7 @@ Test them using postman or any other rest client.
 }
 ```
 
-#### <a id="not_found>Resource Not Found Response</a>
+#### <a id="not_found">Resource Not Found Response</a>
 ```json
 {
   "success": false,
