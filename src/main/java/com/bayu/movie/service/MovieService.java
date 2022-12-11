@@ -3,18 +3,19 @@ package com.bayu.movie.service;
 import com.bayu.movie.dto.CreateMovieRequest;
 import com.bayu.movie.dto.MovieResponse;
 import com.bayu.movie.dto.UpdateMovieRequest;
+import com.bayu.movie.model.Movie;
 
 import java.util.List;
 
 public interface MovieService {
 
-    MovieResponse addNewMovie(CreateMovieRequest createMovieRequest);
+    Movie addNewMovie(CreateMovieRequest createMovieRequest);
 
-    MovieResponse updateMovie(Integer id, UpdateMovieRequest updateMovieRequest);
+    Movie updateMovie(Integer id, UpdateMovieRequest updateMovieRequest);
 
-    MovieResponse getMovieDetail(Integer id);
+    Movie getMovieDetail(Integer id);
 
-    List<MovieResponse> getAllMovies();
+    List<Movie> getAllMovies();
 
     void deleteMovie(Integer id);
 }
