@@ -2,6 +2,7 @@ package com.bayu.movie.controller;
 
 import com.bayu.movie.dto.*;
 import com.bayu.movie.service.MovieService;
+import com.bayu.movie.util.ValidationUtil;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
+    private final ValidationUtil validationUtil;
 
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, ValidationUtil validationUtil) {
         this.movieService = movieService;
+        this.validationUtil = validationUtil;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,6 +42,7 @@ public class MovieController {
 
     @PostMapping
     public WebResponse<MovieResponse> addNewMovie(@RequestBody CreateMovieRequest createMovieRequest) {
+        validationUtil.validate(createMovieRequest);
         MovieResponse movie = movieService.addNewMovie(createMovieRequest);
         return WebResponse.<MovieResponse>builder()
                 .success(Boolean.TRUE)
@@ -49,6 +53,7 @@ public class MovieController {
 
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public WebResponse<MovieResponse> updateMovie(@PathVariable(name = "id") Integer id, @RequestBody UpdateMovieRequest updateMovieRequest) {
+        validationUtil.validate(updateMovieRequest);
         MovieResponse movie = movieService.updateMovie(id, updateMovieRequest);
         return WebResponse.<MovieResponse>builder()
                 .success(Boolean.TRUE)
