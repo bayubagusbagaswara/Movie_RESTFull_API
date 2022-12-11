@@ -18,16 +18,22 @@ Created Movie RESTFull API to provide information about movies.
 CREATE DATABASE movie_db WITH OWNER postgres;
 ```
 
-**3. Postgresql username and password**
+**3. PostgreSQL username and password**
 
 + open `src/main/resources/application.properties`
 
 ```bash
+spring.datasource.url=jdbc:postgresql://localhost:5432/movie_db
 spring.datasource.username=postgres
 spring.datasource.password=postgres
 ```
 
 + change `spring.datasource.username` and `spring.datasource.password` as per your postgres installation
++ set `ddl-auto` is `validated` because we use database migration
+
+```bash
+spring.jpa.hibernate.ddl-auto=validate
+```
 
 **4. Install library**
 
