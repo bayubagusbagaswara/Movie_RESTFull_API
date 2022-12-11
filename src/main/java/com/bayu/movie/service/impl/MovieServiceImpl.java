@@ -4,7 +4,6 @@ import com.bayu.movie.dto.CreateMovieRequest;
 import com.bayu.movie.dto.MovieResponse;
 import com.bayu.movie.dto.UpdateMovieRequest;
 import com.bayu.movie.dto.mapper.MovieMapper;
-import com.bayu.movie.exception.BadRequestException;
 import com.bayu.movie.exception.ResourceNotFoundException;
 import com.bayu.movie.model.Movie;
 import com.bayu.movie.repository.MovieRepository;
