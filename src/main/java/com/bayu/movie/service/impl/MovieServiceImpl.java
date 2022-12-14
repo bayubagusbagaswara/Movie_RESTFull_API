@@ -81,4 +81,14 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.delete(movie);
     }
 
+    @Override
+    public List<Movie> getMoviesByTitleContains(String title) {
+        return movieRepository.findByTitleContainsIgnoreCase(title);
+    }
+
+    @Override
+    public Movie getByTitle(String title) {
+        return movieRepository.findByTitleIgnoreCase(title)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with title : " + title));
+    }
 }
