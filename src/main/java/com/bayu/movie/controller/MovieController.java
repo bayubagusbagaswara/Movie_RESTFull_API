@@ -47,6 +47,30 @@ public class MovieController {
         return new ResponseEntity<>(webResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/title", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WebResponse<MovieResponse>> getMovieByTitle(@RequestParam(name = "title") String title) {
+        Movie movie = movieService.getByTitle(title);
+        MovieResponse movieResponse = mapFromMovie(movie);
+        WebResponse<MovieResponse> webResponse = WebResponse.<MovieResponse>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get movie with title : " + title)
+                .data(movieResponse)
+                .build();
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/title/contains", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WebResponse<List<MovieResponse>>> getMoviesByTitleContains(@RequestParam(name = "title") String title) {
+        List<Movie> movieList = movieService.getMoviesByTitleContains(title);
+        List<MovieResponse> movieResponses = mapFromMovieList(movieList);
+        WebResponse<List<MovieResponse>> webResponse = WebResponse.<List<MovieResponse>>builder()
+                .success(Boolean.TRUE)
+                .message("Successfully get movie with title : " + title)
+                .data(movieResponses)
+                .build();
+        return new ResponseEntity<>(webResponse, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<WebResponse<MovieResponse>> addNewMovie(@Valid @RequestBody CreateMovieRequest createMovieRequest) {
         Movie movie = movieService.addNewMovie(createMovieRequest);
