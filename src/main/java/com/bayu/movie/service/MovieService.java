@@ -18,4 +18,8 @@ public interface MovieService {
     List<Movie> getAllMovies();
 
     void deleteMovie(Integer id);
+
+    Movie getByTitle(String title);
+
+    List<Movie> getMoviesByTitleContains(String title);
 }
