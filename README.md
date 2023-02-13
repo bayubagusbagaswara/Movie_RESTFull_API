@@ -2,6 +2,11 @@
 
 Created Movie RESTFull API to provide information about movies.
 
+# NOTE !!!
+- Kita tambahkan model User
+- Kita tambahkan Spring Security JWT
+- Kita tambahkan Swagger Documentation
+
 ## Technologies
 
 - Java JDK 1.8
