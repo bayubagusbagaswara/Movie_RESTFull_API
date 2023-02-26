@@ -7,6 +7,13 @@ Created Movie RESTFull API to provide information about movies.
 - Kita tambahkan Spring Security JWT
 - Kita tambahkan Swagger Documentation
 
+# Spring Security
+
+1. Basic Auth, ini tanpa Role, hanya username dan password. Ini menggunakan username default dan password dari spring security
+2. Basic Auth InMemoryUserDetailsManager, jadi username dan password disimpan dalam memory, tidak perlu menggunakan password dari spring security 
+3. Role Based, ini menggunakan tambahan Role, seperti ADMIN atau USER 
+4. Token Based, ini menggunakan token, token untuk mengakses tiap API
+
 ## Technologies
 
 - Java JDK 1.8
